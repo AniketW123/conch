@@ -9,7 +9,7 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -26,5 +26,40 @@ class RoundedButton extends StatelessWidget {
       ),
     );
   }
-
 }
+
+class GoogleButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+
+  GoogleButton({required this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            children: [
+              const Image(
+                image: AssetImage('assets/images/GoogleLogo.jpg'),
+              ),
+              Text(
+                text,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

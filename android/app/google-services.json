@@ -29,6 +29,49 @@
             {
               "client_id": "312064957830-q9olaf3nvbuvnfei63umas1hq9cclhpb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "312064957830-2eraititb0rckooq71s7op0a0k4e8948.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aniketwarty.conch.conch"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312064957830:android:c0054e73eeeb25aa5ea007",
+        "android_client_info": {
+          "package_name": "con.aniketwarty.conch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312064957830-q9olaf3nvbuvnfei63umas1hq9cclhpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK6iRbsrdW9OmWFWHIYSSJ4D5jdkqSWzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312064957830-q9olaf3nvbuvnfei63umas1hq9cclhpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "312064957830-2eraititb0rckooq71s7op0a0k4e8948.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aniketwarty.conch.conch"
+              }
             }
           ]
         }

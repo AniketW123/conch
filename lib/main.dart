@@ -1,19 +1,44 @@
+import 'package:conch/pages/log_in.dart';
 import 'package:flutter/material.dart';
-import 'screens/home.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'pages/home.dart';
+import 'pages/log_in.dart';
 
-void main() {
-  runApp(const Conch());
+void main() => runApp(const App());
+
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  State<App> createState() => _AppState();
 }
 
-class Conch extends StatelessWidget {
-  const Conch({Key? key}) : super(key: key);
+class _AppState extends State<App> {
+
+  bool logged_in = false;
+
+  void logged_in_checker() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool? l = prefs.getBool("logged_in");
+    logged_in = l ?? false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    logged_in_checker();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        // fontFamily: GoogleFonts.mPlusRounded1c().fontFamily
       ),
-      home: const Home(),
+      home: logged_in ? Home() : SignInPage()
     );
   }
 }

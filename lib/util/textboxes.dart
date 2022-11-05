@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TextBox extends StatelessWidget {
-  const TextBox({Key? key}) : super(key: key);
+class RoundedTextBox extends StatelessWidget {
+  final String? hintText;
+  final bool? obscureText;
+
+  final void Function(String)? onSubmitted;
+
+  RoundedTextBox({this.hintText, this.obscureText, this.onSubmitted});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: TextField(
+        obscureText: obscureText ?? false,
+        onSubmitted:(String value) => onSubmitted,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25)
+          ),
+          hintText: hintText,
+        ),
+      )
+    );
   }
 }
