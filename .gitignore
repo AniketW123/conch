@@ -32,9 +32,6 @@ migrate_working_dir/
 .pub/
 /build/
 
-# iOS related
-ios/Runner
-
 # Web related
 lib/generated_plugin_registrant.dart
 
