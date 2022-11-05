@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/home.dart';
 
 void main() {
   runApp(const Conch());
@@ -12,22 +13,7 @@ class Conch extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Home(title: 'Flutter Demo Home Page'),
+      home: const Home(),
     );
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "312064957830",
+    "project_id": "conch-e6c0a",
+    "storage_bucket": "conch-e6c0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312064957830:android:b25ecce80e50db2a5ea007",
+        "android_client_info": {
+          "package_name": "com.aniketwarty.conch.conch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312064957830-q9olaf3nvbuvnfei63umas1hq9cclhpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK6iRbsrdW9OmWFWHIYSSJ4D5jdkqSWzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312064957830-q9olaf3nvbuvnfei63umas1hq9cclhpb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
