@@ -37,7 +37,7 @@ class GoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+      padding: const EdgeInsets.symmetric(vertical:70, horizontal: 20),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -47,15 +47,8 @@ class GoogleButton extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            children: [
-              const Image(
-                image: AssetImage('assets/images/GoogleLogo.jpg'),
-              ),
-              Text(
-                text,
-              ),
-            ],
+          child: Text(
+            text,
           ),
         ),
       ),
