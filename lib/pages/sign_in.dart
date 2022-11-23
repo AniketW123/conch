@@ -1,5 +1,11 @@
+import 'dart:html';
+
+import 'package:conch/main.dart';
+import 'package:conch/util/alerts.dart';
+import 'package:conch/util/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/buttons.dart';
 import '../util/textboxes.dart';
 import 'home.dart';
@@ -19,9 +25,15 @@ class _SignInPageState extends State<SignInPage> {
 
   Color emailBorderColor = Colors.grey;
   Color passwordBorderColor = Colors.grey;
+  bool isObscured = true;
+  IconData passwordVisibilityIcon = Icons.visibility;
   String errorText = "";
 
-  bool rememberMe = false;
+  String resetPasswordEmail = "";
+  bool forgotPasswordHovered = false;
+  bool rememberMe = true;
+
+  late User currentUser;
 
   Future register ({required String email, required String password}) async {
     try {
@@ -29,6 +41,7 @@ class _SignInPageState extends State<SignInPage> {
         email: email,
         password: password,
       );
+      currentUser = _auth.currentUser!;
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
@@ -58,6 +71,7 @@ class _SignInPageState extends State<SignInPage> {
           email: email,
           password: password
       );
+      currentUser = _auth.currentUser!;
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
@@ -80,16 +94,39 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  Future forgotPassword ({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      snackbar(context: context, message: "An email with instructions to reset your password has been sent to $resetPasswordEmail. Make sure to check your spam folder if you do not receive the email within a few minutes.");
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      snackbar(context: context, message: "(Error: ${e.code}) ${e.message} Please try again.");
+    } catch (e) {
+      print(e);
+      snackbar(context: context, message: "Error: $e. Please try again.");
+    }
+  }
+
+  void saveLogin () async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("remember_me", true);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      backgroundColor: Color(0xfffbf6f2),
+      backgroundColor: const Color(0xfffbf6f2),
       body: Center(
         child: FractionallySizedBox(
-          widthFactor: 0.4,
+          widthFactor: 0.35,
           heightFactor: 0.75,
           child: Container(
             decoration: BoxDecoration(
@@ -125,6 +162,17 @@ class _SignInPageState extends State<SignInPage> {
                   label: "Password (6+ characters)",
                   borderColor: passwordBorderColor,
                   padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                  obscureText: isObscured,
+                  textVisibilityIcon: Icon(
+                    passwordVisibilityIcon,
+                    color: Colors.grey.shade700,
+                  ),
+                  revealText: () {
+                    setState (() {
+                      isObscured = !isObscured;
+                      isObscured ? (passwordVisibilityIcon = Icons.visibility) : (passwordVisibilityIcon = Icons.visibility_off);
+                    });
+                  },
                   onChanged: (String s) {
                     setState(() {
                       passwordBorderColor = Colors.grey;
@@ -132,7 +180,6 @@ class _SignInPageState extends State<SignInPage> {
                     });
                     typedPassword = s;
                   },
-                  obscureText: true,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -147,12 +194,55 @@ class _SignInPageState extends State<SignInPage> {
                   padding: const EdgeInsets.fromLTRB(15, 0, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        "Forgot password?",
-                        style: TextStyle(
-                          fontSize: 15,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 2
+                      GestureDetector(
+                        onTap: () {
+                          alert(
+                              context: context,
+                              title: "Enter your email to receive a link to reset your password.",
+                              message: TextField(
+                                onChanged: (String s) {
+                                  resetPasswordEmail = s;
+                                },
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                            actions: [
+                              AlertButton(
+                                title: "Send",
+                                onPressed: () {
+                                  forgotPassword(email: resetPasswordEmail);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              AlertButton(title: "Exit")
+                            ],
+                          );
+                        },
+                        child: MouseRegion(
+                          onEnter: (p) {
+                            setState(() {
+                              forgotPasswordHovered = true;
+                            });
+                          },
+                          onExit: (p) {
+                            setState(() {
+                              forgotPasswordHovered = false;
+                            });
+                          },
+                          child: Text(
+                            "Forgot password?",
+                            style: TextStyle(
+                              fontSize: 15,
+                              decoration: forgotPasswordHovered ? TextDecoration.underline : TextDecoration.none,
+                              decorationThickness: 2
+                            ),
+                          ),
                         ),
                       ),
                       const Expanded(child: SizedBox()),
@@ -160,7 +250,7 @@ class _SignInPageState extends State<SignInPage> {
                         value: rememberMe,
                         onChanged: (bool? value) {
                           setState(() {
-                            rememberMe = value!;
+                            rememberMe = value ?? true;
                           });
                         },
                       ),
@@ -176,7 +266,10 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () {
                           register(email: typedEmail, password: typedPassword).then((result) {
                             if (result == null) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                              if(rememberMe) {
+                                saveLogin();
+                              }
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(user: currentUser,)));
                             }
                           });
                         },
@@ -189,7 +282,7 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () {
                           signIn(email: typedEmail, password: typedPassword).then((result) {
                             if (result == null) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(user: currentUser,)));
                             }
                           });
                         },

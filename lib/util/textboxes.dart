@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 class RoundedTextBox extends StatelessWidget {
-  final String? label;
-
-  final String? hintText;
-  final bool? obscureText;
-  final Color? borderColor;
-
-  final void Function(String)? onChanged;
-  final void Function(String)? onSubmitted;
-
   final EdgeInsetsGeometry? padding;
 
-  RoundedTextBox({this.padding, this.label, this.borderColor, this.hintText, this.obscureText, this.onChanged, this.onSubmitted});
+  final String? label;
+
+  final Color? borderColor;
+  final String? hintText;
+
+  final bool? obscureText;
+  final Widget? textVisibilityIcon;
+  final VoidCallback? revealText;
+
+  final void Function(String)? onChanged;
+
+  RoundedTextBox({this.padding, this.label, this.borderColor, this.hintText, this.obscureText, this.textVisibilityIcon, this.revealText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +27,12 @@ class RoundedTextBox extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(label ?? "", style: const TextStyle(fontWeight: FontWeight.bold),),
           ) : const SizedBox(),
-          TextField(
+          TextFormField(
             obscureText: obscureText ?? false,
             onChanged: onChanged,
             style: const TextStyle(
               fontSize: 20,
             ),
-            onSubmitted:(String value) => onSubmitted,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -40,6 +41,13 @@ class RoundedTextBox extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: borderColor ?? Colors.grey),
+              ),
+              suffixIcon: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: (obscureText != null) ? IconButton(
+                  icon: textVisibilityIcon ?? Icon(Icons.visibility),
+                  onPressed: revealText,
+                ) : const SizedBox(),
               ),
               hintText: hintText,
             ),
